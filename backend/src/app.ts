@@ -1,6 +1,10 @@
 import express from 'express';
 import cors from 'cors';
 import authRoutes from './routes/authRoutes';
+import postRoutes from './routes/postRoutes';
+import likeRoutes from './routes/likeRoutes';
+import commentRoutes from './routes/commentRoutes';
+import followRoutes from './routes/followRoutes';
 
 const app = express();
 
@@ -8,9 +12,14 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use('/uploads', express.static('uploads'));
 
 // Routes
 app.use('/api/auth', authRoutes);
+app.use('/api/posts', postRoutes);
+app.use('/api/posts', likeRoutes);
+app.use('/api/posts', commentRoutes);
+app.use('/api/users', followRoutes);
 
 // Health check
 app.get('/health', (req, res) => {
