@@ -1,6 +1,6 @@
 import * as postDAO from '../dao/postDAO';
 import db from '../config/database';
-import { Post, PostImage } from '../types';
+import { Post, PostImage, Comment } from '../types';
 
 export const createPost = async (userId: number, content: string, imageUrls?: string[]): Promise<Post & { images: PostImage[] }> => {
     const newPost = postDAO.createPost(db, userId, content);
@@ -29,4 +29,8 @@ export const deletePost = async (postId: number, userId: number): Promise<void> 
     }
 
     postDAO.deletePostById(db, postId);
+}
+
+export const searchPosts = async (query: string): Promise<Post[]> => {
+    return postDAO.searchPosts(db, query);
 }
