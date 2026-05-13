@@ -2,20 +2,31 @@ import Database from 'better-sqlite3';
 import { User, UserCreateInput } from '../types';
 
 export function create(db: Database.Database, input: UserCreateInput): User {
-  const stmt = db.prepare(`
-    INSERT INTO users (email, password, nickname, avatar, bio)
-    VALUES (?, ?, ?, ?, ?)
-  `);
+  try {
+    const stmt = db.prepare(`
+      INSERT INTO users (email, password, nickname, avatar, bio)
+      VALUES (?, ?, ?, ?, ?)
+    `);
 
-  const info = stmt.run(
-    input.email,
-    input.password,
-    input.nickname,
-    input.avatar || '😀',
-    input.bio || ''
-  );
+    const info = stmt.run(
+      input.email,
+      input.password,
+      input.nickname,
+      input.avatar || '😀',
+      input.bio || ''
+    );
 
-  return findById(db, info.lastInsertRowid as number)!;
+    const user = findById(db, info.lastInsertRowid as number);
+    if (!user) {
+      throw new Error('Failed to retrieve created user');
+    }
+    return user;
+  } catch (error: any) {
+    if (error.code === 'SQLITE_CONSTRAINT_UNIQUE') {
+      throw new Error(`User with email ${input.email} already exists`);
+    }
+    throw error;
+  }
 }
 
 export function findByEmail(db: Database.Database, email: string): User | null {
