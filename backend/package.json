@@ -10,7 +10,7 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
-    "db:migrate": "tsx src/db/migrations/001_initial_schema.ts"
+    "db:migrate": "tsx src/db/migrations/001_initial_schema.ts && tsx src/db/migrations/002_add_social_features.ts"
   },
   "keywords": ["note", "community", "api"],
   "author": "",
