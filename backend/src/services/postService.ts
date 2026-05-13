@@ -1,10 +1,32 @@
-// backend/src/services/postService.ts
-// THIS IS A PLACEHOLDER IMPLEMENTATION TO FAIL THE TESTS (RED)
+import * as postDAO from '../dao/postDAO';
+import db from '../config/database';
+import { Post, PostImage } from '../types';
 
-export const createPost = async (userId: number, content: string, imageUrls?: string[]): Promise<any> => {
-    throw new Error('Not implemented');
+export const createPost = async (userId: number, content: string, imageUrls?: string[]): Promise<Post & { images: PostImage[] }> => {
+    const newPost = postDAO.createPost(db, userId, content);
+
+    const images: PostImage[] = [];
+    if (imageUrls && imageUrls.length > 0) {
+        for (let i = 0; i < imageUrls.length; i++) {
+            const imageUrl = imageUrls[i];
+            const newImage = postDAO.addImageToPost(db, newPost.id, imageUrl, i);
+            images.push(newImage);
+        }
+    }
+
+    return { ...newPost, images };
 }
 
 export const deletePost = async (postId: number, userId: number): Promise<void> => {
-    throw new Error('Not implemented');
+    const post = postDAO.findPostById(db, postId);
+
+    if (!post) {
+        throw new Error('Post not found');
+    }
+
+    if (post.user_id !== userId) {
+        throw new Error('Unauthorized');
+    }
+
+    postDAO.deletePostById(db, postId);
 }
