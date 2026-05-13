@@ -1,0 +1,14 @@
+import jwt from 'jsonwebtoken';
+import { AuthTokenPayload } from '../types';
+
+const JWT_SECRET = process.env.JWT_SECRET || 'dev-secret';
+const JWT_EXPIRES_IN = '7d';
+
+export function generateToken(payload: AuthTokenPayload): string {
+  return jwt.sign(payload, JWT_SECRET, { expiresIn: JWT_EXPIRES_IN });
+}
+
+export function verifyToken(token: string): AuthTokenPayload {
+  const decoded = jwt.verify(token, JWT_SECRET) as AuthTokenPayload;
+  return decoded;
+}
