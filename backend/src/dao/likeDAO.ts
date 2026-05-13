@@ -28,3 +28,30 @@ export function findLikesByUserId(db: Database.Database, userId: number): Like[]
   const stmt = db.prepare('SELECT * FROM likes WHERE userId = ?');
   return stmt.all(userId) as Like[];
 }
+
+export function findLike(db: Database.Database, userId: number, postId: number): Like | undefined {
+  const stmt = db.prepare('SELECT * FROM likes WHERE userId = ? AND postId = ?');
+  return stmt.get(userId, postId) as Like | undefined;
+}
+
+export function getLikesByNoteId(db: Database.Database, postId: number): Like[] {
+  const stmt = db.prepare('SELECT * FROM likes WHERE postId = ?');
+  return stmt.all(postId) as Like[];
+}
+
+export function getLikeCountByNoteId(db: Database.Database, postId: number): number {
+  const stmt = db.prepare('SELECT COUNT(*) as count FROM likes WHERE postId = ?');
+  const result = stmt.get(postId) as { count: number };
+  return result.count;
+}
+
+// Export as object for easier mocking in tests
+export const likeDAO = {
+  createLike,
+  deleteLike,
+  findLikesByPostId,
+  findLikesByUserId,
+  findLike,
+  getLikesByNoteId,
+  getLikeCountByNoteId
+};

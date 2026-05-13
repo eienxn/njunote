@@ -11,7 +11,26 @@ export const getCommentsByPostId = async (db: Database, postId: number) => {
   return stmt.all(postId);
 };
 
+export const getCommentById = async (db: Database, id: number) => {
+  const stmt = db.prepare('SELECT * FROM comments WHERE id = ?');
+  return stmt.get(id);
+};
+
+export const getCommentsByNoteId = async (db: Database, postId: number) => {
+  const stmt = db.prepare('SELECT * FROM comments WHERE postId = ?');
+  return stmt.all(postId);
+};
+
 export const deleteComment = async (db: Database, id: number) => {
   const stmt = db.prepare('DELETE FROM comments WHERE id = ?');
   return stmt.run(id);
+};
+
+// Export as object for easier mocking in tests
+export const commentDAO = {
+  createComment,
+  getCommentsByPostId,
+  getCommentById,
+  getCommentsByNoteId,
+  deleteComment
 };

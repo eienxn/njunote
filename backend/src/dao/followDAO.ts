@@ -25,3 +25,17 @@ export const findFollowing = async (db: Database, userId: number) => {
   const stmt = db.prepare('SELECT * FROM follows WHERE followerId = ?');
   return stmt.all(userId);
 };
+
+export const getFollowers = findFollowers;
+export const getFollowing = findFollowing;
+
+// Export as object for easier mocking in tests
+export const followDAO = {
+  createFollow,
+  deleteFollow,
+  findFollow,
+  findFollowers,
+  findFollowing,
+  getFollowers,
+  getFollowing
+};
