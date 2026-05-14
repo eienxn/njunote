@@ -5,6 +5,7 @@ import postRoutes from './routes/postRoutes';
 import likeRoutes from './routes/likeRoutes';
 import commentRoutes from './routes/commentRoutes';
 import followRoutes from './routes/followRoutes';
+import tagRoutes from './routes/tagRoutes';
 
 const app = express();
 
@@ -20,6 +21,7 @@ app.use('/api/posts', postRoutes);
 app.use('/api/posts', likeRoutes);
 app.use('/api/posts', commentRoutes);
 app.use('/api/users', followRoutes);
+app.use('/api/tags', tagRoutes);
 
 // Health check
 app.get('/health', (req, res) => {
