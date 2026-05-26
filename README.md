@@ -1,4 +1,4 @@
-# 图文笔记社区 Web App
+# 图文笔记社区 Web App （课程作业测试）
 
 > AI4SE Final Project - Phase 1: Backend Authentication System
 
